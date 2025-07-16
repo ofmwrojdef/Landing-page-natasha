@@ -14,7 +14,7 @@
         body {
             font-family: 'Arial', sans-serif;
             background-image: url('./background.jpg');
-            background-position: center;
+            background-position: center center;
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -25,16 +25,10 @@
             justify-content: center;
             color: white;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Fallback para móviles */
-        @media (max-width: 768px) {
-            body {
-                background-attachment: scroll;
-                background-size: cover;
-            }
-        }
-
+        /* FONDO SIEMPRE VISIBLE - overlay MUY sutil */
         body::before {
             content: '';
             position: fixed;
@@ -42,17 +36,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 64, 255, 0.05), rgba(227, 36, 0, 0.05));
-            animation: backgroundPulse 3s ease-in-out infinite alternate;
-            z-index: -1;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(255, 64, 255, 0.02));
+            animation: backgroundPulse 4s ease-in-out infinite alternate;
+            z-index: 1;
+            pointer-events: none;
         }
 
         @keyframes backgroundPulse {
             0% { 
-                background: linear-gradient(135deg, rgba(255, 64, 255, 0.02), rgba(227, 36, 0, 0.02));
+                background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(255, 64, 255, 0.01));
             }
             100% { 
-                background: linear-gradient(135deg, rgba(255, 64, 255, 0.08), rgba(227, 36, 0, 0.08));
+                background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(255, 64, 255, 0.03));
             }
         }
 
@@ -61,11 +56,13 @@
             padding: 40px 20px;
             max-width: 400px;
             width: 100%;
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(2px);
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
         }
 
         .profile-section {
@@ -118,34 +115,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .online-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            margin-bottom: 15px;
-        }
-
-        .online-dot {
-            width: 12px;
-            height: 12px;
-            background: #00ff88;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff88;
-            animation: pulse 2s infinite;
-        }
-
-        .location-icon {
-            font-size: 12px;
-            color: #00ff88;
-        }
-
-        .location-text {
-            font-size: 14px;
-            opacity: 0.9;
-            color: #00ff88;
-        }
-
         .subtitle {
             font-size: 16px;
             opacity: 0.9;
@@ -196,6 +165,10 @@
         .link-icon {
             margin-right: 10px;
             font-size: 18px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
         }
 
         .link-icon img {
@@ -205,15 +178,16 @@
             filter: brightness(1.2);
         }
 
-        /* Timer styles */
+        /* Timer styles - MAS VISIBLE */
         .trial-counter {
             margin-top: 30px;
             padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 64, 255, 0.1), rgba(227, 36, 0, 0.1));
+            background: rgba(255, 64, 255, 0.15);
             border-radius: 15px;
-            border: 2px solid rgba(255, 64, 255, 0.2);
+            border: 2px solid rgba(255, 64, 255, 0.3);
             animation: counterPulse 1.5s ease-in-out infinite alternate;
             transform-origin: center;
+            backdrop-filter: blur(5px);
         }
 
         .trial-text {
@@ -224,6 +198,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             animation: textFlicker 2s linear infinite;
+            text-shadow: 0 0 10px rgba(255, 64, 255, 0.5);
         }
 
         .countdown-timer {
@@ -242,6 +217,7 @@
             opacity: 0.9;
             animation: urgencyPulse 2s ease-in-out infinite;
             font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
         }
 
         @keyframes counterPulse {
@@ -276,15 +252,15 @@
             }
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 10px #00ff88; }
-            50% { box-shadow: 0 0 20px #00ff88, 0 0 30px #00ff88; }
-            100% { box-shadow: 0 0 10px #00ff88; }
-        }
-
+        /* Móviles */
         @media (max-width: 480px) {
+            body {
+                background-attachment: scroll;
+            }
+            
             .container {
                 padding: 20px 15px;
+                background: rgba(0, 0, 0, 0.1);
             }
             
             .name {
@@ -296,14 +272,10 @@
                 font-size: 14px;
             }
 
-            .modal-content {
-                margin: 25% auto;
-                padding: 20px;
-            }
-
             .trial-counter {
                 margin-top: 20px;
                 padding: 15px;
+                background: rgba(255, 64, 255, 0.2);
             }
 
             .countdown-timer {
@@ -328,10 +300,8 @@
         </div>
         
         <div class="links-container">
-            <a href="https://onlyfans.com/natashasammy/c95" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400; --btn-color: #ff40ff;" target="_blank">
-                <span class="link-icon">
-                    <img src="./icon.png" alt="Icon" onerror="this.style.display='none'; this.parentElement.innerHTML='💬';">
-                </span>
+            <a href="#" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400;" onclick="openOnlyFans(event)">
+                <img src="./icon.png" alt="" class="link-icon" style="width: 20px; height: 20px; margin-right: 10px; vertical-align: middle;">
                 Chat with mee here
             </a>
         </div>
@@ -346,9 +316,29 @@
         </div>
     </div>
 
-    </div>
-
     <script>
+        // DEEPLINK QUE FUNCIONA - FUERZA NAVEGADOR EXTERNO
+        function openOnlyFans(event) {
+            event.preventDefault();
+            
+            // Crear enlace temporal
+            const link = document.createElement('a');
+            link.href = 'https://onlyfans.com/natashasammy/c95';
+            
+            // Intentar abrir en app nativa primero
+            window.location.href = 'googlechrome://navigate?url=https://onlyfans.com/natashasammy/c95';
+            
+            // Fallback para otros navegadores
+            setTimeout(() => {
+                window.open('https://onlyfans.com/natashasammy/c95', '_blank', 'noopener,noreferrer');
+            }, 500);
+            
+            // Último fallback
+            setTimeout(() => {
+                window.location.href = 'https://onlyfans.com/natashasammy/c95';
+            }, 1000);
+        }
+
         // Countdown timer functionality
         let totalSeconds = 9 * 60; // 9 minutos
 
