@@ -31,8 +31,18 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 64, 255, 0.1), rgba(227, 36, 0, 0.1));
+            background: linear-gradient(135deg, rgba(255, 64, 255, 0.15), rgba(227, 36, 0, 0.15));
+            animation: backgroundPulse 3s ease-in-out infinite alternate;
             z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0% { 
+                background: linear-gradient(135deg, rgba(255, 64, 255, 0.1), rgba(227, 36, 0, 0.1));
+            }
+            100% { 
+                background: linear-gradient(135deg, rgba(255, 64, 255, 0.25), rgba(227, 36, 0, 0.25));
+            }
         }
 
         .container {
@@ -181,10 +191,11 @@
         .trial-counter {
             margin-top: 30px;
             padding: 20px;
-            background: linear-gradient(135deg, rgba(255, 64, 255, 0.2), rgba(227, 36, 0, 0.2));
+            background: linear-gradient(135deg, rgba(255, 64, 255, 0.25), rgba(227, 36, 0, 0.25));
             border-radius: 15px;
-            border: 1px solid rgba(255, 64, 255, 0.3);
-            animation: glow 2s ease-in-out infinite alternate;
+            border: 2px solid rgba(255, 64, 255, 0.4);
+            animation: counterPulse 1.5s ease-in-out infinite alternate;
+            transform-origin: center;
         }
 
         .trial-text {
@@ -194,26 +205,57 @@
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            animation: textFlicker 2s linear infinite;
         }
 
         .countdown-timer {
             font-size: 36px;
             font-weight: bold;
             color: #fff;
-            text-shadow: 0 0 20px rgba(255, 64, 255, 0.5);
+            text-shadow: 0 0 20px rgba(255, 64, 255, 0.8), 0 0 40px rgba(255, 64, 255, 0.6);
             margin-bottom: 8px;
             font-family: 'Courier New', monospace;
+            animation: timerBounce 1s ease-in-out infinite;
         }
 
         .trial-subtitle {
             font-size: 12px;
-            color: #ccc;
-            opacity: 0.8;
+            color: #ff6b6b;
+            opacity: 0.9;
+            animation: urgencyPulse 2s ease-in-out infinite;
+            font-weight: bold;
         }
 
-        @keyframes glow {
-            0% { box-shadow: 0 0 20px rgba(255, 64, 255, 0.3); }
-            100% { box-shadow: 0 0 30px rgba(255, 64, 255, 0.6); }
+        @keyframes counterPulse {
+            0% { 
+                box-shadow: 0 0 20px rgba(255, 64, 255, 0.4);
+                transform: scale(1);
+            }
+            100% { 
+                box-shadow: 0 0 40px rgba(255, 64, 255, 0.8), 0 0 60px rgba(255, 64, 255, 0.4);
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes timerBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes textFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes urgencyPulse {
+            0%, 100% { 
+                color: #ff6b6b;
+                transform: scale(1);
+            }
+            50% { 
+                color: #ff4444;
+                transform: scale(1.05);
+            }
         }
 
         @keyframes pulse {
@@ -276,11 +318,11 @@
         
         <!-- Free Trial Counter -->
         <div class="trial-counter">
-            <div class="trial-text">🔥 FREE TRIAL ENDING IN</div>
+            <div class="trial-text">🔥 FREE TRIAL ENDING IN 🔥</div>
             <div class="countdown-timer">
                 <span id="minutes">09</span>:<span id="seconds">00</span>
             </div>
-            <div class="trial-subtitle">Don't miss out on exclusive content!</div>
+            <div class="trial-subtitle">⚡ HURRY! LIMITED TIME ONLY! ⚡</div>
         </div>
     </div>
 
@@ -294,14 +336,34 @@
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
             
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+            
+            minutesEl.textContent = minutes.toString().padStart(2, '0');
+            secondsEl.textContent = seconds.toString().padStart(2, '0');
+            
+            // Añadir efecto extra cuando los números cambian
+            if (seconds === 59 || seconds === 29) {
+                minutesEl.style.transform = 'scale(1.2)';
+                setTimeout(() => minutesEl.style.transform = 'scale(1)', 200);
+            }
+            
+            secondsEl.style.transform = 'scale(1.1)';
+            setTimeout(() => secondsEl.style.transform = 'scale(1)', 150);
+            
+            // Efecto especial cuando quedan pocos segundos
+            if (totalSeconds <= 60) {
+                document.querySelector('.trial-counter').style.animation = 'counterPulse 0.5s ease-in-out infinite alternate';
+                document.querySelector('.countdown-timer').style.color = '#ff4444';
+            }
             
             if (totalSeconds > 0) {
                 totalSeconds--;
             } else {
                 // Reiniciar el contador cuando llegue a 0
                 totalSeconds = 9 * 60;
+                document.querySelector('.trial-counter').style.animation = 'counterPulse 1.5s ease-in-out infinite alternate';
+                document.querySelector('.countdown-timer').style.color = '#fff';
             }
         }
 
