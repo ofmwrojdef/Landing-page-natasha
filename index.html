@@ -28,7 +28,7 @@
             overflow-x: hidden;
         }
 
-        /* FONDO SIEMPRE VISIBLE - overlay MUY sutil */
+        /* FONDO FORZADO - MAS VISIBLE EN IN-APP */
         body::before {
             content: '';
             position: fixed;
@@ -36,7 +36,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(255, 64, 255, 0.02));
+            background: rgba(0, 0, 0, 0.05);
             animation: backgroundPulse 4s ease-in-out infinite alternate;
             z-index: 1;
             pointer-events: none;
@@ -44,10 +44,10 @@
 
         @keyframes backgroundPulse {
             0% { 
-                background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(255, 64, 255, 0.01));
+                background: rgba(0, 0, 0, 0.02);
             }
             100% { 
-                background: linear-gradient(135deg, rgba(0, 0, 0, 0.15), rgba(255, 64, 255, 0.03));
+                background: rgba(0, 0, 0, 0.08);
             }
         }
 
@@ -56,11 +56,11 @@
             padding: 40px 20px;
             max-width: 400px;
             width: 100%;
-            background: rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(2px);
+            background: transparent;
+            backdrop-filter: none;
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 2;
         }
@@ -182,12 +182,11 @@
         .trial-counter {
             margin-top: 30px;
             padding: 20px;
-            background: rgba(255, 64, 255, 0.15);
+            background: rgba(255, 64, 255, 0.2);
             border-radius: 15px;
-            border: 2px solid rgba(255, 64, 255, 0.3);
+            border: 2px solid rgba(255, 64, 255, 0.4);
             animation: counterPulse 1.5s ease-in-out infinite alternate;
             transform-origin: center;
-            backdrop-filter: blur(5px);
         }
 
         .trial-text {
@@ -252,15 +251,17 @@
             }
         }
 
-        /* Móviles */
+        /* Móviles - FONDO MAS VISIBLE */
         @media (max-width: 480px) {
             body {
                 background-attachment: scroll;
+                background-color: #1a1a1a; /* Fallback color */
             }
             
             .container {
                 padding: 20px 15px;
-                background: rgba(0, 0, 0, 0.1);
+                background: transparent;
+                backdrop-filter: none;
             }
             
             .name {
@@ -275,7 +276,7 @@
             .trial-counter {
                 margin-top: 20px;
                 padding: 15px;
-                background: rgba(255, 64, 255, 0.2);
+                background: rgba(255, 64, 255, 0.25);
             }
 
             .countdown-timer {
@@ -301,7 +302,7 @@
         
         <div class="links-container">
             <a href="#" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400;" onclick="openOnlyFans(event)">
-                <img src="./icon.png" alt="" class="link-icon" style="width: 20px; height: 20px; margin-right: 10px; vertical-align: middle;">
+                <img src="icon.png" alt="" class="link-icon" style="width: 20px; height: 20px; margin-right: 10px; vertical-align: middle;">
                 Chat with mee here
             </a>
         </div>
@@ -317,25 +318,47 @@
     </div>
 
     <script>
-        // DEEPLINK QUE FUNCIONA - FUERZA NAVEGADOR EXTERNO
+        // DEEPLINK ULTRA AGRESIVO - FUERZA SALIDA DE IN-APP
         function openOnlyFans(event) {
             event.preventDefault();
             
-            // Crear enlace temporal
-            const link = document.createElement('a');
-            link.href = 'https://onlyfans.com/natashasammy/c95';
+            const url = 'https://onlyfans.com/natashasammy/c95';
             
-            // Intentar abrir en app nativa primero
-            window.location.href = 'googlechrome://navigate?url=https://onlyfans.com/natashasammy/c95';
+            // 1. Intentar esquema de Chrome (Android)
+            const chromeIntent = `intent://onlyfans.com/natashasammy/c95#Intent;scheme=https;package=com.android.chrome;end`;
             
-            // Fallback para otros navegadores
+            // 2. Detectar si es iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isIOS) {
+                // iOS: Forzar Safari
+                window.location.href = `x-web-search://?${url}`;
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 100);
+            } else {
+                // Android: Intentar Chrome intent
+                window.location.href = chromeIntent;
+                
+                // Fallback agresivo
+                setTimeout(() => {
+                    window.location.href = `googlechrome://navigate?url=${url}`;
+                }, 200);
+                
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 500);
+            }
+            
+            // Último recurso universal
             setTimeout(() => {
-                window.open('https://onlyfans.com/natashasammy/c95', '_blank', 'noopener,noreferrer');
-            }, 500);
-            
-            // Último fallback
-            setTimeout(() => {
-                window.location.href = 'https://onlyfans.com/natashasammy/c95';
+                const link = document.createElement('a');
+                link.href = url;
+                link.target = '_system'; // PhoneGap/Cordova
+                link.rel = 'external'; // Ionic
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }, 1000);
         }
 
