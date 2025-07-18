@@ -398,7 +398,7 @@
     </main>
 
     <script>
-        // DEEPLINK CORREGIDO - ABRE DIRECTAMENTE LA URL
+        // DEEPLINK OPTIMIZADO PARA ANDROID Y iOS
         function openOnlyFans(event) {
             event.preventDefault();
             
@@ -412,75 +412,107 @@
             const isFacebook = /FBAN|FBAV/.test(userAgent);
             const isTikTok = /TikTok/.test(userAgent);
             const isTwitter = /Twitter/.test(userAgent);
-            const isInAppBrowser = isInstagram || isFacebook || isTikTok || isTwitter;
             
             // Función para abrir en navegador externo
             function openInExternalBrowser() {
                 if (isIOS) {
-                    // iOS: Métodos corregidos para abrir directamente la URL
+                    // iOS: Abrir en Safari de forma simple y efectiva
                     
-                    if (isInAppBrowser) {
-                        // Si estamos en un navegador in-app, intentar múltiples métodos
-                        // Método 1: Abrir directamente en Safari
-                        window.open(url, '_blank');
-                        
-                        // Método 2: Usar el esquema de Safari
+                    // Método principal: window.open funciona bien en la mayoría de casos
+                    const newWindow = window.open(url, '_blank');
+                    
+                    // Si estamos en Instagram/Facebook, intentar forzar Safari
+                    if (isInstagram || isFacebook) {
                         setTimeout(() => {
-                            window.location.href = url.replace('https://', 'safari://');
+                            // Este método funciona específicamente en Instagram
+                            window.location.href = url;
                         }, 100);
-                        
-                        // Método 3: Forzar con x-callback-url
-                        setTimeout(() => {
-                            window.location.href = `x-callback-url://open?url=${encodeURIComponent(url)}`;
-                        }, 200);
                     }
                     
-                    // Método 4: Intent de Chrome para iOS
+                    // Fallback final
                     setTimeout(() => {
-                        window.location.href = `googlechrome://navigate?url=${url}`;
-                    }, 300);
-                    
-                    // Método 5: Abrir directamente
-                    setTimeout(() => {
-                        window.location = url;
-                    }, 400);
+                        if (!newWindow || newWindow.closed) {
+                            window.location.href = url;
+                        }
+                    }, 500);
                     
                 } else if (isAndroid) {
-                    // Android: Métodos mejorados
+                    // Android: Solución mejorada para evitar el buscador
                     
-                    // Método 1: Intent directo sin esquema (evita el buscador)
-                    window.location.href = `intent://onlyfans.com/natashasammy/c97#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(url)};end`;
+                    // Método 1: Intent específico para navegador con la URL completa
+                    const androidUrl = `intent://open/${encodeURIComponent(url)}#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${url};end`;
                     
-                    // Método 2: Abrir con el navegador predeterminado
+                    try {
+                        // Intentar primero con el intent mejorado
+                        window.location.href = androidUrl;
+                    } catch (e) {
+                        // Si falla, usar método alternativo
+                        console.log('Intent failed, trying alternative method');
+                    }
+                    
+                    // Método 2: Crear un iframe oculto que fuerce la apertura
                     setTimeout(() => {
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.target = '_blank';
-                        a.rel = 'noreferrer';
-                        a.click();
+                        const iframe = document.createElement('iframe');
+                        iframe.style.display = 'none';
+                        iframe.src = url;
+                        document.body.appendChild(iframe);
+                        
+                        // Remover el iframe después de un momento
+                        setTimeout(() => {
+                            document.body.removeChild(iframe);
+                        }, 1000);
                     }, 200);
                     
-                    // Método 3: Intent ACTION_VIEW
+                    // Método 3: Usar location.replace para evitar el historial
                     setTimeout(() => {
-                        window.location.href = `intent:${url}#Intent;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
+                        window.location.replace(url);
                     }, 400);
                     
-                    // Método 4: Chrome directo con la URL completa
+                    // Método 4: Crear form y submit (evita algunos bloqueadores)
                     setTimeout(() => {
-                        window.location.href = `googlechrome://navigate?url=${url}`;
+                        const form = document.createElement('form');
+                        form.method = 'GET';
+                        form.action = url;
+                        form.target = '_blank';
+                        document.body.appendChild(form);
+                        form.submit();
+                        document.body.removeChild(form);
                     }, 600);
+                    
+                    // Método 5: Window.open como último recurso
+                    setTimeout(() => {
+                        window.open(url, '_system');
+                    }, 800);
                 }
                 
-                // Fallback universal mejorado
-                setTimeout(() => {
-                    // Intentar abrir en nueva pestaña/ventana
-                    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-                    
-                    // Si no se pudo abrir nueva ventana, navegar directamente
-                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-                        window.location.href = url;
-                    }
-                }, 800);
+                // Método adicional para navegadores in-app
+                if (isInstagram || isFacebook || isTikTok) {
+                    // Mostrar instrucciones al usuario si todos los métodos fallan
+                    setTimeout(() => {
+                        // Crear un mensaje temporal
+                        const message = document.createElement('div');
+                        message.style.cssText = `
+                            position: fixed;
+                            bottom: 20px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            background: rgba(0, 0, 0, 0.8);
+                            color: white;
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            font-size: 14px;
+                            z-index: 9999;
+                            text-align: center;
+                        `;
+                        message.innerHTML = 'Tap "..." → "Open in Browser" / "Abrir en navegador"';
+                        document.body.appendChild(message);
+                        
+                        // Remover mensaje después de 5 segundos
+                        setTimeout(() => {
+                            document.body.removeChild(message);
+                        }, 5000);
+                    }, 1500);
+                }
             }
             
             // Ejecutar la función de apertura
