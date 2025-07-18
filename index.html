@@ -188,7 +188,52 @@
         .subtitle {
             font-size: 16px;
             opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .online-indicator {
+            display: flex;
+            align-items: center;
+            color: #4CAF50;
+            font-weight: 500;
+            gap: 5px;
+        }
+
+        .online-indicator::before {
+            content: '●';
+            font-size: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .separator {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .age-info {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .bio {
+            font-size: 15px;
+            opacity: 0.85;
             margin-bottom: 30px;
+            line-height: 1.4;
+            padding: 0 20px;
         }
 
         .links-container {
@@ -201,18 +246,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px 25px;
+            padding: 18px 30px;
             text-decoration: none;
             color: white;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            border-radius: 25px;
-            background: linear-gradient(45deg, var(--btn-color1), var(--btn-color2)) !important;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 35px;
+            background: linear-gradient(135deg, #ff0099 0%, #ff006a 100%) !important;
+            box-shadow: 0 8px 25px rgba(255, 0, 153, 0.4), 
+                        0 0 50px rgba(255, 0, 153, 0.3),
+                        inset 0 0 20px rgba(255, 255, 255, 0.1);
             cursor: pointer;
+            border: none;
+            animation: buttonGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes buttonGlow {
+            0% {
+                box-shadow: 0 8px 25px rgba(255, 0, 153, 0.4), 
+                            0 0 50px rgba(255, 0, 153, 0.3),
+                            inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            100% {
+                box-shadow: 0 12px 35px rgba(255, 0, 153, 0.6), 
+                            0 0 80px rgba(255, 0, 153, 0.5),
+                            inset 0 0 25px rgba(255, 255, 255, 0.2);
+            }
         }
 
         .social-link::before {
@@ -222,7 +286,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -231,7 +295,10 @@
         }
 
         .social-link:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 45px rgba(255, 0, 153, 0.7), 
+                        0 0 100px rgba(255, 0, 153, 0.6),
+                        inset 0 0 30px rgba(255, 255, 255, 0.3);
         }
 
         .link-icon {
@@ -334,8 +401,8 @@
             }
             
             .social-link {
-                padding: 12px 20px;
-                font-size: 14px;
+                padding: 14px 25px;
+                font-size: 16px;
             }
 
             .trial-counter {
@@ -377,13 +444,17 @@
                 <span class="verified-badge" aria-label="Cuenta verificada">✓</span>
             </h1>
             
-            <p class="subtitle"></p>
+            <p class="subtitle">@natashasammy</p>
+            <div class="status-info">
+                <span class="online-indicator">Available now</span>
+            </div>
+            <p class="bio">My name is Natasha, 18 y/o Girl. Looking to make friends<span id="location-text"></span>❤️</p>
         </header>
         
         <nav class="links-container">
-            <a href="#" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400;" onclick="openOnlyFans(event)" aria-label="Chat con Natasha en OnlyFans">
+            <a href="#" class="social-link" onclick="openOnlyFans(event)" aria-label="Chat con Natasha en OnlyFans">
                 <img src="onlyfans.png" alt="OnlyFans" class="link-icon">
-                Chat with mee here
+                FREE ONLYFANS 💜
             </a>
         </nav>
         
@@ -398,7 +469,7 @@
     </main>
 
     <script>
-        // DEEPLINK OPTIMIZADO PARA ANDROID Y iOS
+        // DEEPLINK DEFINITIVO - SOLUCIÓN PROBADA
         function openOnlyFans(event) {
             event.preventDefault();
             
@@ -412,111 +483,74 @@
             const isFacebook = /FBAN|FBAV/.test(userAgent);
             const isTikTok = /TikTok/.test(userAgent);
             const isTwitter = /Twitter/.test(userAgent);
+            const isSnapchat = /Snapchat/.test(userAgent);
             
-            // Función para abrir en navegador externo
-            function openInExternalBrowser() {
-                if (isIOS) {
-                    // iOS: Abrir en Safari de forma simple y efectiva
-                    
-                    // Método principal: window.open funciona bien en la mayoría de casos
-                    const newWindow = window.open(url, '_blank');
-                    
-                    // Si estamos en Instagram/Facebook, intentar forzar Safari
-                    if (isInstagram || isFacebook) {
-                        setTimeout(() => {
-                            // Este método funciona específicamente en Instagram
-                            window.location.href = url;
-                        }, 100);
-                    }
-                    
-                    // Fallback final
-                    setTimeout(() => {
-                        if (!newWindow || newWindow.closed) {
-                            window.location.href = url;
-                        }
-                    }, 500);
-                    
-                } else if (isAndroid) {
-                    // Android: Solución mejorada para evitar el buscador
-                    
-                    // Método 1: Intent específico para navegador con la URL completa
-                    const androidUrl = `intent://open/${encodeURIComponent(url)}#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${url};end`;
-                    
-                    try {
-                        // Intentar primero con el intent mejorado
-                        window.location.href = androidUrl;
-                    } catch (e) {
-                        // Si falla, usar método alternativo
-                        console.log('Intent failed, trying alternative method');
-                    }
-                    
-                    // Método 2: Crear un iframe oculto que fuerce la apertura
-                    setTimeout(() => {
-                        const iframe = document.createElement('iframe');
-                        iframe.style.display = 'none';
-                        iframe.src = url;
-                        document.body.appendChild(iframe);
-                        
-                        // Remover el iframe después de un momento
-                        setTimeout(() => {
-                            document.body.removeChild(iframe);
-                        }, 1000);
-                    }, 200);
-                    
-                    // Método 3: Usar location.replace para evitar el historial
-                    setTimeout(() => {
-                        window.location.replace(url);
-                    }, 400);
-                    
-                    // Método 4: Crear form y submit (evita algunos bloqueadores)
-                    setTimeout(() => {
-                        const form = document.createElement('form');
-                        form.method = 'GET';
-                        form.action = url;
-                        form.target = '_blank';
-                        document.body.appendChild(form);
-                        form.submit();
-                        document.body.removeChild(form);
-                    }, 600);
-                    
-                    // Método 5: Window.open como último recurso
-                    setTimeout(() => {
-                        window.open(url, '_system');
-                    }, 800);
-                }
-                
-                // Método adicional para navegadores in-app
-                if (isInstagram || isFacebook || isTikTok) {
-                    // Mostrar instrucciones al usuario si todos los métodos fallan
-                    setTimeout(() => {
-                        // Crear un mensaje temporal
-                        const message = document.createElement('div');
-                        message.style.cssText = `
-                            position: fixed;
-                            bottom: 20px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            background: rgba(0, 0, 0, 0.8);
-                            color: white;
-                            padding: 15px 20px;
-                            border-radius: 10px;
-                            font-size: 14px;
-                            z-index: 9999;
-                            text-align: center;
-                        `;
-                        message.innerHTML = 'Tap "..." → "Open in Browser" / "Abrir en navegador"';
-                        document.body.appendChild(message);
-                        
-                        // Remover mensaje después de 5 segundos
-                        setTimeout(() => {
-                            document.body.removeChild(message);
-                        }, 5000);
-                    }, 1500);
-                }
+            // Crear un enlace oculto para forzar la apertura
+            function createHiddenLink() {
+                const link = document.createElement('a');
+                link.href = url;
+                link.style.display = 'none';
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener noreferrer');
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => document.body.removeChild(link), 100);
             }
             
-            // Ejecutar la función de apertura
-            openInExternalBrowser();
+            if (isIOS) {
+                // iOS - Métodos específicos
+                
+                if (isInstagram) {
+                    // Instagram en iOS - Método especial
+                    window.location.href = url;
+                    setTimeout(() => {
+                        document.location = url;
+                    }, 100);
+                } else if (isFacebook) {
+                    // Facebook en iOS
+                    window.open(url, '_blank');
+                } else {
+                    // Otros navegadores iOS
+                    createHiddenLink();
+                }
+                
+            } else if (isAndroid) {
+                // Android - Solución definitiva
+                
+                if (isInstagram || isFacebook || isTikTok) {
+                    // Apps sociales en Android - Usar intent especial
+                    const encodedUrl = encodeURIComponent(url);
+                    const intentUrl = `intent://browse/${encodedUrl}#Intent;scheme=http;package=com.android.chrome;end`;
+                    
+                    // Crear iframe invisible para el intent
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = intentUrl;
+                    document.body.appendChild(iframe);
+                    
+                    // Fallback con enlace
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        createHiddenLink();
+                    }, 500);
+                    
+                } else {
+                    // Navegador normal Android
+                    createHiddenLink();
+                }
+                
+            } else {
+                // Desktop o otros dispositivos
+                window.open(url, '_blank');
+            }
+            
+            // Último fallback - Redirigir después de un tiempo
+            setTimeout(() => {
+                if (document.hasFocus()) {
+                    // Si todavía estamos en la página, intentar de nuevo
+                    window.location.href = url;
+                }
+            }, 2000);
         }
 
         // Countdown timer functionality
@@ -560,6 +594,56 @@
         // Iniciar el contador
         updateTimer();
         setInterval(updateTimer, 1000);
+
+        // Detectar ubicación del usuario por IP
+        async function getUserLocation() {
+            try {
+                // Intentar obtener la ubicación por IP
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                let location = null;
+                if (data.city) {
+                    location = data.city;
+                } else if (data.region) {
+                    location = data.region;
+                } else if (data.country_name) {
+                    location = data.country_name;
+                }
+                
+                if (location) {
+                    document.getElementById('location-text').textContent = ` in ${location}.`;
+                } else {
+                    document.getElementById('location-text').textContent = '.';
+                }
+            } catch (error) {
+                // Si falla, intentar con otro servicio
+                try {
+                    const response = await fetch('https://ipinfo.io/json?token=test');
+                    const data = await response.json();
+                    
+                    let location = null;
+                    if (data.city) {
+                        location = data.city;
+                    } else if (data.region) {
+                        location = data.region;
+                    }
+                    
+                    if (location) {
+                        document.getElementById('location-text').textContent = ` in ${location}.`;
+                    } else {
+                        document.getElementById('location-text').textContent = '.';
+                    }
+                } catch (err) {
+                    // Si no se puede detectar, terminar la frase con punto
+                    document.getElementById('location-text').textContent = '.';
+                    console.log('Could not detect location');
+                }
+            }
+        }
+
+        // Llamar a la función de ubicación cuando cargue la página
+        getUserLocation();
     </script>
 </body>
 </html>
