@@ -3,7 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Natasha - Landing Page</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>Natasha Sammy | Contenido Exclusivo y Premium | OnlyFans</title>
+    <meta name="description" content="Únete a Natasha Sammy en OnlyFans para contenido exclusivo y premium. Chat privado, fotos y videos únicos. ¡Prueba gratis limitada disponible!">
+    <meta name="keywords" content="Natasha Sammy, Natasha, Sammy, OnlyFans, contenido exclusivo, chat privado, contenido premium, fotos exclusivas, videos premium, natashasammy">
+    <meta name="author" content="Natasha Sammy">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Spanish">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onlyfans.com/natashasammy/c97">
+    <meta property="og:title" content="Natasha Sammy | Contenido Exclusivo en OnlyFans">
+    <meta property="og:description" content="Únete a Natasha Sammy para contenido exclusivo. Chat privado disponible. ¡Oferta especial por tiempo limitado!">
+    <meta property="og:image" content="profile.jpg">
+    <meta property="og:image:alt" content="Natasha Sammy OnlyFans">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Natasha Sammy OnlyFans">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://onlyfans.com/natashasammy/c97">
+    <meta property="twitter:title" content="Natasha Sammy | OnlyFans Exclusivo">
+    <meta property="twitter:description" content="Contenido exclusivo de Natasha Sammy y chat privado. ¡Únete ahora con prueba gratis!">
+    <meta property="twitter:image" content="profile.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://onlyfans.com/natashasammy/c97">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="onlyfans.png">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Natasha Sammy",
+        "alternateName": ["Natasha", "Sammy", "natashasammy"],
+        "url": "https://onlyfans.com/natashasammy/c97",
+        "sameAs": [
+            "https://onlyfans.com/natashasammy/c97"
+        ],
+        "jobTitle": "Content Creator",
+        "description": "Natasha Sammy - Creadora de contenido exclusivo en OnlyFans"
+    }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -13,11 +60,6 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('background.jpg');
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
             background-color: #1a1a1a;
             min-height: 100vh;
             display: flex;
@@ -27,6 +69,32 @@
             color: white;
             position: relative;
             overflow-x: hidden;
+        }
+
+        /* Video de fondo */
+        .video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        /* Overlay oscuro sobre el video */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* FONDO FORZADO - MAS VISIBLE EN IN-APP */
@@ -58,10 +126,11 @@
             max-width: 400px;
             width: 100%;
             background: transparent;
-            backdrop-filter: none;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 2;
         }
@@ -91,7 +160,7 @@
             transform: scale(1.05);
         }
 
-        .name {
+        h1.name {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 10px;
@@ -129,7 +198,9 @@
         }
 
         .social-link {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 15px 25px;
             text-decoration: none;
             color: white;
@@ -164,10 +235,12 @@
         }
 
         .link-icon {
+            width: 24px;
+            height: 24px;
             margin-right: 10px;
-            font-size: 18px;
             display: inline-block;
             vertical-align: middle;
+            object-fit: contain;
         }
 
         /* Timer styles - MAS VISIBLE */
@@ -247,16 +320,16 @@
         @media (max-width: 480px) {
             body {
                 background-attachment: scroll;
-                background-color: #1a1a1a; /* Fallback color */
+                background-color: #1a1a1a;
             }
             
             .container {
                 padding: 20px 15px;
-                background: transparent;
-                backdrop-filter: none;
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
             }
             
-            .name {
+            h1.name {
                 font-size: 24px;
             }
             
@@ -274,84 +347,146 @@
             .countdown-timer {
                 font-size: 28px;
             }
+
+            .link-icon {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="profile-section">
+    <!-- Video de fondo -->
+    <video autoplay muted loop playsinline class="video-background">
+        <source src="background.mp4" type="video/mp4">
+        <source src="background.webm" type="video/webm">
+        <!-- Fallback para navegadores que no soporten el video -->
+    </video>
+    
+    <!-- Overlay del video -->
+    <div class="video-overlay"></div>
+    
+    <main class="container">
+        <header class="profile-section">
             <div class="profile-image">
-                <img src="profile.jpg" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <img src="profile.jpg" alt="Natasha Sammy - Perfil OnlyFans" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                  <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-size: 60px;">N</div>
             </div>
             <h1 class="name">
-                Natasha
-                <span class="verified-badge">✓</span>
+                Natasha Sammy
+                <span class="verified-badge" aria-label="Cuenta verificada">✓</span>
             </h1>
             
             <p class="subtitle"></p>
-        </div>
+        </header>
         
-        <div class="links-container">
-            <a href="#" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400;" onclick="openOnlyFans(event)">
-                <span class="link-icon">💬</span>
+        <nav class="links-container">
+            <a href="#" class="social-link" style="--btn-color1: #ff40ff; --btn-color2: #e32400;" onclick="openOnlyFans(event)" aria-label="Chat con Natasha en OnlyFans">
+                <img src="onlyfans.png" alt="OnlyFans" class="link-icon">
                 Chat with mee here
             </a>
-        </div>
+        </nav>
         
         <!-- Free Trial Counter -->
-        <div class="trial-counter">
+        <section class="trial-counter" aria-label="Contador de prueba gratuita">
             <div class="trial-text">🔥 FREE TRIAL ENDING IN 🔥</div>
-            <div class="countdown-timer">
+            <div class="countdown-timer" role="timer" aria-live="polite">
                 <span id="minutes">09</span>:<span id="seconds">00</span>
             </div>
             <div class="trial-subtitle">⚡ HURRY! LIMITED TIME ONLY! ⚡</div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
-        // DEEPLINK ULTRA AGRESIVO - FUERZA SALIDA DE IN-APP
+        // DEEPLINK MEJORADO - SOLUCIÓN AL PROBLEMA DE BÚSQUEDA
         function openOnlyFans(event) {
             event.preventDefault();
             
-            const url = 'https://onlyfans.com/natashasammy/c95';
+            const url = 'https://onlyfans.com/natashasammy/c97';
             
-            // 1. Intentar esquema de Chrome (Android)
-            const chromeIntent = `intent://onlyfans.com/natashasammy/c95#Intent;scheme=https;package=com.android.chrome;end`;
+            // Detectar el navegador y dispositivo
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            const isAndroid = /android/i.test(userAgent);
+            const isInstagram = /Instagram/.test(userAgent);
+            const isFacebook = /FBAN|FBAV/.test(userAgent);
+            const isTikTok = /TikTok/.test(userAgent);
+            const isTwitter = /Twitter/.test(userAgent);
             
-            // 2. Detectar si es iOS
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            
-            if (isIOS) {
-                // iOS: Forzar Safari
-                window.location.href = `x-web-search://?${url}`;
+            // Función para abrir en navegador externo
+            function openInExternalBrowser() {
+                if (isIOS) {
+                    // iOS: Múltiples métodos para abrir en Safari
+                    // Método 1: Usando el esquema x-web-search con la URL completa
+                    window.location.href = `x-web-search://?${encodeURIComponent(url)}`;
+                    
+                    // Método 2: Intentar con el esquema de Safari directamente
+                    setTimeout(() => {
+                        window.location.href = url.replace('https://', 'safari-https://');
+                    }, 250);
+                    
+                    // Método 3: Forzar apertura con googlechrome si está instalado
+                    setTimeout(() => {
+                        window.location.href = url.replace('https://', 'googlechrome://');
+                    }, 500);
+                    
+                    // Método 4: Último recurso - abrir directamente
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                    }, 750);
+                    
+                } else if (isAndroid) {
+                    // Android: Múltiples métodos para abrir en Chrome/navegador
+                    
+                    // Método 1: Intent de Android para Chrome
+                    const chromeIntent = `intent://${url.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
+                    window.location.href = chromeIntent;
+                    
+                    // Método 2: Esquema de Chrome directo
+                    setTimeout(() => {
+                        window.location.href = `googlechrome://navigate?url=${encodeURIComponent(url)}`;
+                    }, 250);
+                    
+                    // Método 3: Intent genérico de navegador
+                    setTimeout(() => {
+                        window.location.href = `intent:${url}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
+                    }, 500);
+                    
+                    // Método 4: Abrir en nueva ventana
+                    setTimeout(() => {
+                        window.open(url, '_system');
+                    }, 750);
+                }
+                
+                // Fallback universal para todos los dispositivos
+                setTimeout(() => {
+                    // Crear un enlace temporal y hacer click
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }, 1000);
+                
+                // Último intento - cambiar la ubicación actual
                 setTimeout(() => {
                     window.location.href = url;
-                }, 100);
-            } else {
-                // Android: Intentar Chrome intent
-                window.location.href = chromeIntent;
-                
-                // Fallback agresivo
-                setTimeout(() => {
-                    window.location.href = `googlechrome://navigate?url=${url}`;
-                }, 200);
-                
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 500);
+                }, 1500);
             }
             
-            // Último recurso universal
-            setTimeout(() => {
-                const link = document.createElement('a');
-                link.href = url;
-                link.target = '_system'; // PhoneGap/Cordova
-                link.rel = 'external'; // Ionic
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }, 1000);
+            // Ejecutar la función de apertura
+            openInExternalBrowser();
+            
+            // Para Instagram específicamente, intentar un método adicional
+            if (isInstagram) {
+                setTimeout(() => {
+                    // Instagram en iOS a veces responde mejor a esto
+                    window.location = url;
+                }, 100);
+            }
         }
 
         // Countdown timer functionality
