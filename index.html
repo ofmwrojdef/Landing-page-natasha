@@ -235,9 +235,9 @@
         }
 
         .link-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
             display: inline-block;
             vertical-align: middle;
             object-fit: contain;
@@ -349,8 +349,8 @@
             }
 
             .link-icon {
-                width: 20px;
-                height: 20px;
+                width: 28px;
+                height: 28px;
             }
         }
     </style>
@@ -398,7 +398,7 @@
     </main>
 
     <script>
-        // DEEPLINK MEJORADO - SOLUCIÓN AL PROBLEMA DE BÚSQUEDA
+        // DEEPLINK CORREGIDO - ABRE DIRECTAMENTE LA URL
         function openOnlyFans(event) {
             event.preventDefault();
             
@@ -412,81 +412,79 @@
             const isFacebook = /FBAN|FBAV/.test(userAgent);
             const isTikTok = /TikTok/.test(userAgent);
             const isTwitter = /Twitter/.test(userAgent);
+            const isInAppBrowser = isInstagram || isFacebook || isTikTok || isTwitter;
             
             // Función para abrir en navegador externo
             function openInExternalBrowser() {
                 if (isIOS) {
-                    // iOS: Múltiples métodos para abrir en Safari
-                    // Método 1: Usando el esquema x-web-search con la URL completa
-                    window.location.href = `x-web-search://?${encodeURIComponent(url)}`;
+                    // iOS: Métodos corregidos para abrir directamente la URL
                     
-                    // Método 2: Intentar con el esquema de Safari directamente
-                    setTimeout(() => {
-                        window.location.href = url.replace('https://', 'safari-https://');
-                    }, 250);
-                    
-                    // Método 3: Forzar apertura con googlechrome si está instalado
-                    setTimeout(() => {
-                        window.location.href = url.replace('https://', 'googlechrome://');
-                    }, 500);
-                    
-                    // Método 4: Último recurso - abrir directamente
-                    setTimeout(() => {
+                    if (isInAppBrowser) {
+                        // Si estamos en un navegador in-app, intentar múltiples métodos
+                        // Método 1: Abrir directamente en Safari
                         window.open(url, '_blank');
-                    }, 750);
+                        
+                        // Método 2: Usar el esquema de Safari
+                        setTimeout(() => {
+                            window.location.href = url.replace('https://', 'safari://');
+                        }, 100);
+                        
+                        // Método 3: Forzar con x-callback-url
+                        setTimeout(() => {
+                            window.location.href = `x-callback-url://open?url=${encodeURIComponent(url)}`;
+                        }, 200);
+                    }
+                    
+                    // Método 4: Intent de Chrome para iOS
+                    setTimeout(() => {
+                        window.location.href = `googlechrome://navigate?url=${url}`;
+                    }, 300);
+                    
+                    // Método 5: Abrir directamente
+                    setTimeout(() => {
+                        window.location = url;
+                    }, 400);
                     
                 } else if (isAndroid) {
-                    // Android: Múltiples métodos para abrir en Chrome/navegador
+                    // Android: Métodos mejorados
                     
-                    // Método 1: Intent de Android para Chrome
-                    const chromeIntent = `intent://${url.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
-                    window.location.href = chromeIntent;
+                    // Método 1: Intent directo sin esquema (evita el buscador)
+                    window.location.href = `intent://onlyfans.com/natashasammy/c97#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(url)};end`;
                     
-                    // Método 2: Esquema de Chrome directo
+                    // Método 2: Abrir con el navegador predeterminado
                     setTimeout(() => {
-                        window.location.href = `googlechrome://navigate?url=${encodeURIComponent(url)}`;
-                    }, 250);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'noreferrer';
+                        a.click();
+                    }, 200);
                     
-                    // Método 3: Intent genérico de navegador
+                    // Método 3: Intent ACTION_VIEW
                     setTimeout(() => {
-                        window.location.href = `intent:${url}#Intent;scheme=https;action=android.intent.action.VIEW;end`;
-                    }, 500);
+                        window.location.href = `intent:${url}#Intent;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
+                    }, 400);
                     
-                    // Método 4: Abrir en nueva ventana
+                    // Método 4: Chrome directo con la URL completa
                     setTimeout(() => {
-                        window.open(url, '_system');
-                    }, 750);
+                        window.location.href = `googlechrome://navigate?url=${url}`;
+                    }, 600);
                 }
                 
-                // Fallback universal para todos los dispositivos
+                // Fallback universal mejorado
                 setTimeout(() => {
-                    // Crear un enlace temporal y hacer click
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.target = '_blank';
-                    a.rel = 'noopener noreferrer';
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }, 1000);
-                
-                // Último intento - cambiar la ubicación actual
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 1500);
+                    // Intentar abrir en nueva pestaña/ventana
+                    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+                    
+                    // Si no se pudo abrir nueva ventana, navegar directamente
+                    if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+                        window.location.href = url;
+                    }
+                }, 800);
             }
             
             // Ejecutar la función de apertura
             openInExternalBrowser();
-            
-            // Para Instagram específicamente, intentar un método adicional
-            if (isInstagram) {
-                setTimeout(() => {
-                    // Instagram en iOS a veces responde mejor a esto
-                    window.location = url;
-                }, 100);
-            }
         }
 
         // Countdown timer functionality
