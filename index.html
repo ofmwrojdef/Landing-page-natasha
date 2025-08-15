@@ -452,7 +452,7 @@
         </header>
         
         <nav class="links-container">
-            <a href="https://onlyfans.com/natashasammy/c97" class="social-link" onclick="openInDefaultBrowser(event, 'https://onlyfans.com/natashasammy/c97')" aria-label="Chat con Natasha en OnlyFans">
+            <a href="https://onlyfans.com/natashasammy/c97" class="social-link" onclick="openInDefaultBrowser(event, 'https://onlyfans.com/natashasammy/c97')" onmousedown="forceExternalBrowser(event, 'https://onlyfans.com/natashasammy/c97')" aria-label="Chat con Natasha en OnlyFans">
                 <img src="onlyfans.png" alt="OnlyFans" class="link-icon">
                 FREE ONLYFANS 💜
             </a>
@@ -473,27 +473,150 @@
         function openInDefaultBrowser(event, url) {
             event.preventDefault();
             
-            // Detectar si está en un navegador in-app
-            const isInApp = /Instagram|Facebook|Twitter|LinkedIn|Snapchat|TikTok|WhatsApp|Telegram|Discord|Slack|Line|WeChat|KakaoTalk|Viber|Messenger/i.test(navigator.userAgent);
+            // Detectar navegadores in-app más específicamente
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isInApp = (
+                userAgent.includes('instagram') ||
+                userAgent.includes('fbav') ||
+                userAgent.includes('fban') ||
+                userAgent.includes('twitter') ||
+                userAgent.includes('linkedin') ||
+                userAgent.includes('snapchat') ||
+                userAgent.includes('tiktok') ||
+                userAgent.includes('whatsapp') ||
+                userAgent.includes('telegram') ||
+                userAgent.includes('discord') ||
+                userAgent.includes('slack') ||
+                userAgent.includes('line') ||
+                userAgent.includes('wechat') ||
+                userAgent.includes('kakaotalk') ||
+                userAgent.includes('viber') ||
+                userAgent.includes('messenger') ||
+                // Detectar WebView en general
+                userAgent.includes('wv') ||
+                userAgent.includes('webview') ||
+                // Detectar navegadores móviles in-app
+                (userAgent.includes('mobile') && (userAgent.includes('safari') === false))
+            );
             
             if (isInApp) {
-                // Intentar abrir en navegador predeterminado usando diferentes métodos
+                // Método 1: Intentar con intent:// (Android)
+                if (/android/i.test(navigator.userAgent)) {
+                    try {
+                        const intentUrl = `intent://onlyfans.com/natashasammy/c97#Intent;scheme=https;package=com.android.chrome;end`;
+                        window.location.href = intentUrl;
+                        return;
+                    } catch (e) {
+                        console.log('Intent method failed');
+                    }
+                }
+                
+                // Método 2: Intentar con iframe temporal (muy efectivo en iOS)
                 try {
-                    // Método 1: Intentar con window.open
-                    const newWindow = window.open(url, '_system');
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = url;
+                    document.body.appendChild(iframe);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                    }, 1000);
+                    
+                    return;
+                } catch (e) {
+                    console.log('Iframe method failed');
+                }
+                
+                // Método 3: Intentar con window.open con target específico
+                try {
+                    const newWindow = window.open(url, '_system', 'location=yes,scrollbars=yes,status=yes');
                     if (newWindow) {
                         newWindow.focus();
-                    } else {
-                        // Método 2: Intentar con location.href
-                        window.location.href = url;
+                        return;
                     }
                 } catch (e) {
-                    // Método 3: Fallback - intentar con location.href
+                    console.log('Window.open _system failed');
+                }
+                
+                // Método 4: Intentar con window.open sin target específico
+                try {
+                    const newWindow = window.open(url);
+                    if (newWindow) {
+                        newWindow.focus();
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Window.open failed');
+                }
+                
+                // Método 5: Intentar con location.replace
+                try {
+                    window.location.replace(url);
+                    return;
+                } catch (e) {
+                    console.log('Location.replace failed');
+                }
+                
+                // Método 6: Fallback final - location.href
+                try {
                     window.location.href = url;
+                } catch (e) {
+                    console.log('All methods failed');
                 }
             } else {
                 // Si no está en navegador in-app, abrir normalmente
                 window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+
+        // Función más agresiva para forzar navegador externo
+        function forceExternalBrowser(event, url) {
+            // Detectar si está en navegador in-app
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isInApp = (
+                userAgent.includes('instagram') ||
+                userAgent.includes('fbav') ||
+                userAgent.includes('fban') ||
+                userAgent.includes('twitter') ||
+                userAgent.includes('linkedin') ||
+                userAgent.includes('snapchat') ||
+                userAgent.includes('tiktok') ||
+                userAgent.includes('whatsapp') ||
+                userAgent.includes('telegram') ||
+                userAgent.includes('discord') ||
+                userAgent.includes('slack') ||
+                userAgent.includes('line') ||
+                userAgent.includes('wechat') ||
+                userAgent.includes('kakaotalk') ||
+                userAgent.includes('viber') ||
+                userAgent.includes('messenger') ||
+                userAgent.includes('wv') ||
+                userAgent.includes('webview')
+            );
+            
+            if (isInApp) {
+                // Método 1: Intentar con múltiples ventanas
+                setTimeout(() => {
+                    try {
+                        window.open(url, '_blank');
+                        window.open(url, '_system');
+                        window.open(url);
+                    } catch (e) {}
+                }, 100);
+                
+                // Método 2: Intentar con location después de un delay
+                setTimeout(() => {
+                    try {
+                        window.location.href = url;
+                    } catch (e) {}
+                }, 200);
+                
+                // Método 3: Intentar con location.replace después de otro delay
+                setTimeout(() => {
+                    try {
+                        window.location.replace(url);
+                    } catch (e) {}
+                }, 300);
             }
         }
 
@@ -591,3 +714,4 @@
     </script>
 </body>
 </html>
+
