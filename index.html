@@ -452,7 +452,7 @@
         </header>
         
         <nav class="links-container">
-            <a href="https://onlyfans.com/natashasammy/c97" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Chat con Natasha en OnlyFans">
+            <a href="https://onlyfans.com/natashasammy/c97" class="social-link" onclick="openInDefaultBrowser(event, 'https://onlyfans.com/natashasammy/c97')" aria-label="Chat con Natasha en OnlyFans">
                 <img src="onlyfans.png" alt="OnlyFans" class="link-icon">
                 FREE ONLYFANS 💜
             </a>
@@ -469,7 +469,33 @@
     </main>
 
     <script>
-       
+        // Función para abrir en navegador predeterminado
+        function openInDefaultBrowser(event, url) {
+            event.preventDefault();
+            
+            // Detectar si está en un navegador in-app
+            const isInApp = /Instagram|Facebook|Twitter|LinkedIn|Snapchat|TikTok|WhatsApp|Telegram|Discord|Slack|Line|WeChat|KakaoTalk|Viber|Messenger/i.test(navigator.userAgent);
+            
+            if (isInApp) {
+                // Intentar abrir en navegador predeterminado usando diferentes métodos
+                try {
+                    // Método 1: Intentar con window.open
+                    const newWindow = window.open(url, '_system');
+                    if (newWindow) {
+                        newWindow.focus();
+                    } else {
+                        // Método 2: Intentar con location.href
+                        window.location.href = url;
+                    }
+                } catch (e) {
+                    // Método 3: Fallback - intentar con location.href
+                    window.location.href = url;
+                }
+            } else {
+                // Si no está en navegador in-app, abrir normalmente
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
 
         // Countdown timer functionality
         let totalSeconds = 9 * 60; // 9 minutos
